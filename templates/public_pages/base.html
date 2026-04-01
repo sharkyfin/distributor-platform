@@ -46,6 +46,14 @@
                     <a href="tel:{{ contact_phone.as_e164|default:contact_phone }}">{{ contact_phone }}</a>
                 {% endif %}
                 <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>
+                <div class="site-footer__socials">
+                    <a href="https://t.me/atlas_service" target="_blank" rel="noopener" aria-label="Telegram">
+                        <span class="site-footer__social-icon site-footer__social-icon--tg">tg</span>
+                    </a>
+                    <a href="https://vk.com/atlas_service" target="_blank" rel="noopener" aria-label="ВКонтакте">
+                        <span class="site-footer__social-icon site-footer__social-icon--vk">vk</span>
+                    </a>
+                </div>
             </div>
         </div>
     </footer>

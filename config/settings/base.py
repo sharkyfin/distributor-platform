@@ -165,7 +165,7 @@ PUBLIC_CONTACT_EMAIL = env(
 )
 PUBLIC_CONTACT_PHONE = env(
     "PUBLIC_CONTACT_PHONE",
-    default="",
+    default="+7 800 555-10-10",
 )
 PUBLIC_OPERATOR_NAME = env(
     "PUBLIC_OPERATOR_NAME",

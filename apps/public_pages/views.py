@@ -25,7 +25,8 @@ class PublicBaseContextMixin:
                 "PUBLIC_CONTACT_EMAIL",
                 "service@atlas-machinery.ru",
             ),
-            "contact_phone": getattr(settings, "PUBLIC_CONTACT_PHONE", ""),
+            "contact_phone": getattr(settings, "PUBLIC_CONTACT_PHONE", "")
+            or "+7 800 555-10-10",
             "operator_name": getattr(
                 settings,
                 "PUBLIC_OPERATOR_NAME",

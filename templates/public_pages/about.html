@@ -5,42 +5,32 @@
 {% block content %}
     <section class="page-header">
         <div class="eyebrow">О продукте</div>
-        <h1 class="page-header__title">Инструмент для обслуживания техники в распределенной дилерской сети</h1>
+        <h1 class="page-header__title">Платформа для сервисной работы в дистрибьюторской сети</h1>
         <p class="page-header__lead">
-            Сервис объединяет публичную карточку машины и внутреннюю систему работы с заявками,
-            гарантиями и историей обслуживания.
+            Удобный интерфейс для обработки обращений, управления техникой и координации сервисной
+            работы между дистрибьютором, филиалами и дилерами.
         </p>
     </section>
 
     <section class="section-grid">
         <article class="surface-card">
-            <div class="surface-card__eyebrow">Публичная часть</div>
-            <h2 class="surface-card__title">Мобильный паспорт техники</h2>
+            <div class="surface-card__eyebrow">Что дает платформа</div>
+            <h2 class="surface-card__title">Единое рабочее пространство по сервису</h2>
             <div class="feature-list">
-                <div class="feature-list__item">Доступ по QR и NFC без раскрытия внутренних идентификаторов.</div>
-                <div class="feature-list__item">Безопасный набор данных: контакты, гарантия, даты ТО, документы с публичным доступом.</div>
-                <div class="feature-list__item">Простая форма обращения с фото и согласием на обработку данных.</div>
+                <div class="feature-list__item">Публичные страницы машин с QR и NFC для клиентов и владельцев техники.</div>
+                <div class="feature-list__item">Быстрая обработка обращений, гарантий и истории обслуживания в одном интерфейсе.</div>
+                <div class="feature-list__item">Прозрачная работа по филиалам, регионам и дилерам без лишней ручной координации.</div>
             </div>
         </article>
 
         <article class="surface-card">
-            <div class="surface-card__eyebrow">Внутренняя система</div>
-            <h2 class="surface-card__title">Работа сервисной службы</h2>
+            <div class="surface-card__eyebrow">Для кого</div>
+            <h2 class="surface-card__title">Для дистрибьютора, дилеров и сервисной команды</h2>
             <div class="feature-list">
-                <div class="feature-list__item">Роли для дистрибьютора, дилеров, менеджеров, инженеров и операторов.</div>
-                <div class="feature-list__item">История работ, гарантия, вложения и аудит административных изменений.</div>
-                <div class="feature-list__item">Фильтрация по организациям, регионам, филиалам и обслуживающим дилерам.</div>
+                <div class="feature-list__item">Руководители видят общую картину по парку техники и обращениям.</div>
+                <div class="feature-list__item">Менеджеры и инженеры работают с заявками, гарантиями и сервисными записями.</div>
+                <div class="feature-list__item">Клиент получает понятную страницу машины и быстрый канал связи с сервисом.</div>
             </div>
         </article>
-    </section>
-
-    <section class="surface-card">
-        <div class="surface-card__eyebrow">Архитектура</div>
-        <h2 class="surface-card__title">Монолитная архитектура без лишних компонентов</h2>
-        <div class="feature-list">
-            <div class="feature-list__item">Django-монолит с серверным рендерингом для быстрого запуска и сопровождения.</div>
-            <div class="feature-list__item">PostgreSQL, Redis, Celery и S3-compatible storage для гибкого развертывания.</div>
-            <div class="feature-list__item">Подходит для размещения на локальной или российской инфраструктуре без обязательных внешних SaaS.</div>
-        </div>
     </section>
 {% endblock %}
