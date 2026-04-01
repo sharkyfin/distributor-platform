@@ -1,0 +1,46 @@
+{% extends "public_pages/base.html" %}
+
+{% block title %}Контакты | {{ product_name }}{% endblock %}
+
+{% block content %}
+    <section class="page-header">
+        <div class="eyebrow">Контакты</div>
+        <h1 class="page-header__title">Контакты по внедрению и сопровождению</h1>
+        <p class="page-header__lead">
+            Для запуска системы на парке техники или в дилерской сети используйте контакты ниже.
+        </p>
+    </section>
+
+    <section class="section-grid">
+        <article class="surface-card">
+            <div class="surface-card__eyebrow">Команда</div>
+            <h2 class="surface-card__title">{{ operator_name }}</h2>
+            <div class="contact-stack">
+                {% if contact_phone %}
+                    <a class="contact-stack__item" href="tel:{{ contact_phone.as_e164|default:contact_phone }}">
+                        <span class="contact-stack__label">Телефон</span>
+                        <span class="contact-stack__value">{{ contact_phone }}</span>
+                    </a>
+                {% endif %}
+                <a class="contact-stack__item" href="mailto:{{ contact_email }}">
+                    <span class="contact-stack__label">Email</span>
+                    <span class="contact-stack__value">{{ contact_email }}</span>
+                </a>
+                <div class="contact-stack__item">
+                    <span class="contact-stack__label">Размещение</span>
+                    <span class="contact-stack__value">{{ operator_address }}</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="surface-card">
+            <div class="surface-card__eyebrow">Что подготовить</div>
+            <h2 class="surface-card__title">Чтобы быстрее обсудить внедрение</h2>
+            <div class="feature-list">
+                <div class="feature-list__item">Количество машин, филиалов и дилеров в сети.</div>
+                <div class="feature-list__item">Какие данные уже есть по гарантиям и сервисной истории.</div>
+                <div class="feature-list__item">Нужны только публичные страницы машин или полный сервисный процесс.</div>
+            </div>
+        </article>
+    </section>
+{% endblock %}

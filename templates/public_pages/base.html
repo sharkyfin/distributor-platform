@@ -1,0 +1,53 @@
+{% load static %}
+
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ product_name }}{% endblock %}</title>
+    <meta name="description" content="Платформа сервисного сопровождения спецтехники с QR/NFC доступом, заявками и историей обслуживания.">
+    <meta name="theme-color" content="#171d22">
+    <link rel="icon" href="{% static 'brand/icon.svg' %}" type="image/svg+xml">
+    <link rel="stylesheet" href="{% static 'public/passport.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="passport-body">
+    <div class="passport-bg"></div>
+    <header class="site-header">
+        <div class="site-shell site-header__inner">
+            <a href="{% url 'public_pages:landing' %}" class="site-brand">
+                <img src="{% static 'brand/icon.svg' %}" alt="" class="site-brand__mark">
+                <span class="site-brand__text">
+                    <span class="site-brand__eyebrow">Сервис техники</span>
+                    <span class="site-brand__title">Цифровой сервисный паспорт</span>
+                </span>
+            </a>
+
+            <nav class="site-nav">
+                <a href="{% url 'public_pages:about' %}">О сервисе</a>
+                <a href="{% url 'public_pages:contact' %}">Контакты</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="site-shell site-main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-shell site-footer__inner">
+            <div>
+                <div class="site-footer__title">{{ product_name }}</div>
+                <div class="site-footer__meta">Платформа управления обслуживанием спецтехники.</div>
+            </div>
+            <div class="site-footer__contacts">
+                {% if contact_phone %}
+                    <a href="tel:{{ contact_phone.as_e164|default:contact_phone }}">{{ contact_phone }}</a>
+                {% endif %}
+                <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

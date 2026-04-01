@@ -1,0 +1,100 @@
+{% extends "public_pages/base.html" %}
+
+{% block title %}{{ product_name }}{% endblock %}
+
+{% block content %}
+    <section class="hero-card">
+        <div class="hero-card__content">
+            <div class="eyebrow">QR и NFC</div>
+            <h1 class="hero-card__title">Сервисный паспорт техники с QR и NFC</h1>
+            <p class="hero-card__lead">
+                На каждой машине размещается NFC-метка и QR-код. По сканированию открывается
+                карточка конкретной единицы техники: сервисные контакты, гарантия, ближайшее ТО
+                и форма обращения.
+            </p>
+
+            <div class="hero-actions">
+                <a href="{% url 'public_pages:contact' %}" class="button button--primary">Связаться</a>
+                <a href="{% url 'public_pages:about' %}" class="button button--ghost">Как это работает</a>
+            </div>
+        </div>
+
+        <div class="hero-card__panel">
+            <div class="metric-card">
+                <span class="metric-card__label">Для клиента</span>
+                <strong class="metric-card__value">1 сканирование</strong>
+                <span class="metric-card__meta">до карточки машины, контактов и заявки</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-card__label">Для дистрибьютора</span>
+                <strong class="metric-card__value">единая система</strong>
+                <span class="metric-card__meta">по гарантиям, заявкам и истории обслуживания</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-grid">
+        <article class="surface-card">
+            <div class="surface-card__eyebrow">Что получает клиент</div>
+            <h2 class="surface-card__title">Паспорт конкретной машины, а не общий сайт компании</h2>
+            <div class="feature-list">
+                <div class="feature-list__item">Модель, серийный номер, филиал, дилер и регион обслуживания.</div>
+                <div class="feature-list__item">Статус гарантии, дата последнего обслуживания и следующее ТО.</div>
+                <div class="feature-list__item">Экстренный номер, сервисные контакты и быстрый переход к заявке.</div>
+                <div class="feature-list__item">Только безопасные публичные документы и публичная история работ.</div>
+            </div>
+        </article>
+
+        <article class="surface-card">
+            <div class="surface-card__eyebrow">Что получает дистрибьютор</div>
+            <h2 class="surface-card__title">Система обслуживания техники для дилерской сети</h2>
+            <div class="feature-list">
+                <div class="feature-list__item">Маршрутизация заявок по филиалу, региону и обслуживающему дилеру.</div>
+                <div class="feature-list__item">Единая база техники, тегов, гарантий, обращений и сервисных записей.</div>
+                <div class="feature-list__item">Современная внутренняя админ-панель для менеджеров, инженеров и операторов.</div>
+                <div class="feature-list__item">Размещение на собственной инфраструктуре или в частном облаке.</div>
+            </div>
+        </article>
+    </section>
+
+    <section class="surface-card" style="margin-top: 32px;">
+        <div class="surface-card__eyebrow">Сценарий работы</div>
+        <h2 class="surface-card__title">Как выглядит путь от QR/NFC до внутренней сервисной очереди</h2>
+        <div class="steps-grid">
+            <div class="step-card">
+                <span class="step-card__index">01</span>
+                <h3 class="step-card__title">Клиент сканирует тег</h3>
+                <p class="step-card__text">Открывается паспорт именно этой единицы техники, без входа в систему.</p>
+            </div>
+            <div class="step-card">
+                <span class="step-card__index">02</span>
+                <h3 class="step-card__title">Видит статус и контакты</h3>
+                <p class="step-card__text">Проверяет гарантию, историю обслуживания и сразу получает рабочий сервисный канал.</p>
+            </div>
+            <div class="step-card">
+                <span class="step-card__index">03</span>
+                <h3 class="step-card__title">Оставляет заявку</h3>
+                <p class="step-card__text">Проблема и фото попадают во внутреннюю очередь с маршрутизацией по филиалу и региону.</p>
+            </div>
+            <div class="step-card">
+                <span class="step-card__index">04</span>
+                <h3 class="step-card__title">Сервис ведет работу</h3>
+                <p class="step-card__text">Менеджер назначает инженера, фиксирует работы и обновляет сервисную историю машины.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-panel">
+        <div>
+            <div class="eyebrow">Внедрение платформы</div>
+            <h2 class="cta-panel__title">Обсудить внедрение</h2>
+            <p class="cta-panel__text">
+                Покажем, как система работает на парке техники: публичные страницы машин,
+                маршрутизация обращений и рабочее место сервисной команды.
+            </p>
+        </div>
+        <div class="cta-panel__actions">
+            <a href="{% url 'public_pages:contact' %}" class="button button--primary">Связаться с командой</a>
+        </div>
+    </section>
+{% endblock %}

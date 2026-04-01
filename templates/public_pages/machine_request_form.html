@@ -1,0 +1,109 @@
+{% extends "public_pages/base.html" %}
+
+{% block title %}Заявка на сервис | {{ machine.name }}{% endblock %}
+
+{% block content %}
+    <section class="page-header">
+        <div class="eyebrow">Сервисная заявка</div>
+        <h1 class="page-header__title">Обращение по машине {{ machine.name }}</h1>
+        <p class="page-header__lead">
+            Укажите контактные данные и опишите проблему. Заявка будет создана во внутренней сервисной системе и направлена по маршруту обслуживания машины.
+        </p>
+    </section>
+
+    <section class="section-grid section-grid--machine">
+        <article class="surface-card">
+            <div class="surface-card__eyebrow">Машина</div>
+            <h2 class="surface-card__title">{{ machine.name }}</h2>
+            <dl class="detail-list">
+                <div class="detail-list__row">
+                    <dt>Модель</dt>
+                    <dd>{{ machine.model_name }}</dd>
+                </div>
+                <div class="detail-list__row">
+                    <dt>Серийный номер</dt>
+                    <dd>{{ machine.serial_number }}</dd>
+                </div>
+                <div class="detail-list__row">
+                    <dt>Регион и филиал</dt>
+                    <dd>{{ machine.region.name }} · {{ machine.branch.name }}</dd>
+                </div>
+                <div class="detail-list__row">
+                    <dt>Обслуживающая организация</dt>
+                    <dd>{{ dealer_name }}</dd>
+                </div>
+            </dl>
+        </article>
+
+        <article class="surface-card">
+            <div class="surface-card__eyebrow">Форма обращения</div>
+            <h2 class="surface-card__title">Опишите проблему</h2>
+            <p class="form-intro">
+                Если приложите фото, сервисной службе будет проще квалифицировать обращение.
+            </p>
+
+            {% if rate_limited %}
+                <div class="alert alert--warning">
+                    Слишком много попыток отправки за короткое время. Подождите немного и повторите запрос.
+                </div>
+            {% endif %}
+
+            {% if form.non_field_errors %}
+                <div class="alert alert--danger">
+                    {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="post" enctype="multipart/form-data" class="form-stack">
+                {% csrf_token %}
+
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                        {{ form.name }}
+                        {% for error in form.name.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="form-field">
+                        <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+                        {{ form.phone }}
+                        {% for error in form.phone.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <label for="{{ form.company.id_for_label }}">{{ form.company.label }}</label>
+                    {{ form.company }}
+                    {% for error in form.company.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
+                </div>
+
+                <div class="form-field">
+                    <label for="{{ form.problem_description.id_for_label }}">{{ form.problem_description.label }}</label>
+                    {{ form.problem_description }}
+                    {% for error in form.problem_description.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
+                </div>
+
+                <div class="form-field">
+                    <label for="{{ form.photos.id_for_label }}">{{ form.photos.label }}</label>
+                    {{ form.photos }}
+                    <div class="form-help">{{ form.photos.help_text }}</div>
+                    {% for error in form.photos.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
+                </div>
+
+                <div class="form-field form-field--checkbox">
+                    <label class="checkbox-row">
+                        {{ form.consent }}
+                        <span>{{ form.consent.label }}</span>
+                    </label>
+                    {% for error in form.consent.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
+                </div>
+
+                <div class="hero-actions">
+                    <button type="submit" class="button button--primary">Отправить заявку</button>
+                    <a href="{% url 'public_pages:machine_detail' machine_tag.public_token %}" class="button button--ghost">Вернуться к паспорту</a>
+                </div>
+            </form>
+        </article>
+    </section>
+{% endblock %}

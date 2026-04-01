@@ -1,0 +1,17 @@
+.git
+.gitignore
+.pytest_cache
+.ruff_cache
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+media
+staticfiles
+node_modules
+dist
+build
+coverage.xml
+.coverage

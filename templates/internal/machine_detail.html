@@ -1,0 +1,215 @@
+{% extends "internal/base.html" %}
+
+{% block title %}{{ machine.name }}{% endblock %}
+
+{% block content %}
+    <section class="ops-detail-grid">
+        <article class="ops-panel">
+            <div class="ops-panel__header">
+                <div>
+                    <div class="ops-panel__eyebrow">Паспорт</div>
+                    <h2 class="ops-panel__title">Паспорт машины</h2>
+                </div>
+            </div>
+
+            <div class="ops-detail-list">
+                <div class="ops-detail-list__row">
+                    <span>Модель</span>
+                    <strong>{{ machine.model_name }}</strong>
+                </div>
+                <div class="ops-detail-list__row">
+                    <span>Серийный номер</span>
+                    <strong>{{ machine.serial_number }}</strong>
+                </div>
+                <div class="ops-detail-list__row">
+                    <span>Инвентарный номер</span>
+                    <strong>{{ machine.inventory_number|default:"—" }}</strong>
+                </div>
+                <div class="ops-detail-list__row">
+                    <span>Регион</span>
+                    <strong>{{ machine.region.name }}</strong>
+                </div>
+                <div class="ops-detail-list__row">
+                    <span>Филиал</span>
+                    <strong>{{ machine.branch.name }}</strong>
+                </div>
+                <div class="ops-detail-list__row">
+                    <span>Дилер</span>
+                    <strong>{{ machine.dealer.name|default:machine.organization.name }}</strong>
+                </div>
+                <div class="ops-detail-list__row">
+                    <span>Публичный тег</span>
+                    <strong>
+                        {% if active_tag %}
+                            {{ active_tag.public_token }}
+                        {% else %}
+                            Активный тег не назначен
+                        {% endif %}
+                    </strong>
+                </div>
+                {% if machine.description %}
+                    <div class="ops-detail-list__row ops-detail-list__row--stacked">
+                        <span>Описание</span>
+                        <strong>{{ machine.description }}</strong>
+                    </div>
+                {% endif %}
+            </div>
+        </article>
+
+        <article class="ops-panel">
+            <div class="ops-panel__header">
+                <div>
+                    <div class="ops-panel__eyebrow">Быстрые действия</div>
+                    <h2 class="ops-panel__title">Работа с карточкой</h2>
+                </div>
+            </div>
+            <div class="ops-actions">
+                {% if public_passport_url %}
+                    <a href="{{ public_passport_url }}" class="ops-button" target="_blank" rel="noopener">Открыть публичный паспорт</a>
+                {% endif %}
+                {% for item in admin_actions %}
+                    <a href="{{ item.href }}" class="ops-button ops-button--ghost">{{ item.label }}</a>
+                {% empty %}
+                    <div class="ops-empty">Дополнительные действия доступны в административной панели.</div>
+                {% endfor %}
+            </div>
+        </article>
+    </section>
+
+    <section class="ops-cards">
+        {% for card in machine_detail_cards %}
+            <article class="ops-card ops-card--{{ card.tone }}">
+                <span class="ops-card__label">{{ card.label }}</span>
+                <strong class="ops-card__value">{{ card.value }}</strong>
+            </article>
+        {% endfor %}
+    </section>
+
+    <section class="ops-grid ops-grid--two">
+        <article class="ops-panel">
+            <div class="ops-panel__header">
+                <div>
+                    <div class="ops-panel__eyebrow">Гарантия</div>
+                    <h2 class="ops-panel__title">Текущее покрытие</h2>
+                </div>
+            </div>
+
+            {% if current_warranty %}
+                <div class="ops-warranty">
+                    <div class="ops-warranty__headline">
+                        <span class="badge badge--warranty-{{ current_warranty.status }}">{{ current_warranty.get_status_display }}</span>
+                        <strong>{{ current_warranty.get_warranty_type_display }}</strong>
+                    </div>
+                    <div class="ops-warranty__meta">
+                        {{ current_warranty.warranty_start|date:"d.m.Y" }} → {{ current_warranty.warranty_end|date:"d.m.Y" }}
+                    </div>
+                    {% if current_warranty.public_summary %}
+                        <div class="ops-warranty__text">{{ current_warranty.public_summary }}</div>
+                    {% endif %}
+                </div>
+            {% else %}
+                <div class="ops-empty">Действующая гарантия по машине не найдена.</div>
+            {% endif %}
+
+            <div class="ops-mini-list">
+                {% for warranty in warranties %}
+                    <div class="ops-mini-list__item">
+                        <div>
+                            <strong>{{ warranty.get_warranty_type_display }}</strong>
+                            <span>{{ warranty.warranty_start|date:"d.m.Y" }} → {{ warranty.warranty_end|date:"d.m.Y" }}</span>
+                        </div>
+                        <span class="badge badge--warranty-{{ warranty.status }}">{{ warranty.get_status_display }}</span>
+                    </div>
+                {% empty %}
+                    <div class="ops-empty">Гарантийных записей пока нет.</div>
+                {% endfor %}
+            </div>
+        </article>
+
+        <article class="ops-panel">
+            <div class="ops-panel__header">
+                <div>
+                    <div class="ops-panel__eyebrow">Вложения</div>
+                    <h2 class="ops-panel__title">Последние файлы по машине</h2>
+                </div>
+            </div>
+            <div class="ops-mini-list">
+                {% for attachment in attachments %}
+                    <a href="{{ attachment.file.url }}" class="ops-mini-list__item" target="_blank" rel="noopener">
+                        <div>
+                            <strong>{{ attachment.title|default:attachment.original_name }}</strong>
+                            <span>{{ attachment.created_at|date:"d.m.Y H:i" }}{% if attachment.uploaded_by %} · {{ attachment.uploaded_by }}{% endif %}</span>
+                        </div>
+                        <span class="badge badge--visibility-{{ attachment.visibility }}">{{ attachment.get_visibility_display }}</span>
+                    </a>
+                {% empty %}
+                    <div class="ops-empty">Вложений по машине пока нет.</div>
+                {% endfor %}
+            </div>
+        </article>
+    </section>
+
+    <section class="ops-grid ops-grid--two">
+        <article class="ops-panel">
+            <div class="ops-panel__header">
+                <div>
+                    <div class="ops-panel__eyebrow">История</div>
+                    <h2 class="ops-panel__title">Сервисная история</h2>
+                </div>
+            </div>
+            <div class="ops-timeline">
+                {% for record in service_records %}
+                    <div class="ops-timeline__item">
+                        <div class="ops-timeline__date">{{ record.service_date|date:"d.m.Y" }}</div>
+                        <div class="ops-timeline__body">
+                            <div class="ops-timeline__headline">
+                                <strong>{{ record.get_work_type_display }}</strong>
+                                {% if record.is_public %}
+                                    <span class="badge badge--public">Есть публичное резюме</span>
+                                {% endif %}
+                            </div>
+                            <div class="ops-timeline__text">{{ record.description }}</div>
+                            {% if record.private_notes %}
+                                <div class="ops-timeline__meta">Внутренние заметки: {{ record.private_notes }}</div>
+                            {% endif %}
+                            <div class="ops-timeline__meta">
+                                {% if record.engineer %}{{ record.engineer }}{% endif %}
+                                {% if record.engineer and record.branch %} · {% endif %}
+                                {% if record.branch %}{{ record.branch.name }}{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="ops-empty">Сервисная история пока не заполнена.</div>
+                {% endfor %}
+            </div>
+        </article>
+
+        <article class="ops-panel">
+            <div class="ops-panel__header">
+                <div>
+                    <div class="ops-panel__eyebrow">Очередь</div>
+                    <h2 class="ops-panel__title">Последние заявки</h2>
+                </div>
+                <a href="{% url 'core:service_requests' %}?q={{ machine.serial_number }}" class="ops-link">Искать в очереди</a>
+            </div>
+            <div class="ops-mini-list">
+                {% for item in service_requests %}
+                    <div class="ops-mini-list__item">
+                        <div>
+                            <strong>#{{ item.pk }} · {{ item.client_name }}</strong>
+                            <span>{{ item.created_at|date:"d.m.Y H:i" }}{% if item.client_company %} · {{ item.client_company }}{% endif %}</span>
+                            <div class="ops-mini-list__text">{{ item.problem_description|truncatechars:150 }}</div>
+                        </div>
+                        <div class="ops-mini-list__badges">
+                            <span class="badge badge--{{ item.status }}">{{ item.get_status_display }}</span>
+                            <span class="badge badge--priority-{{ item.priority }}">{{ item.get_priority_display }}</span>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="ops-empty">По машине пока нет сервисных заявок.</div>
+                {% endfor %}
+            </div>
+        </article>
+    </section>
+{% endblock %}

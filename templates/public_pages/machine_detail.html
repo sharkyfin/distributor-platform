@@ -1,0 +1,198 @@
+{% extends "public_pages/base.html" %}
+
+{% block title %}{{ machine.name }} | {{ product_name }}{% endblock %}
+
+{% block content %}
+    <section class="machine-hero">
+        <div class="machine-hero__content">
+            <div class="eyebrow">Паспорт машины</div>
+            <h1 class="machine-hero__title">{{ machine.name }}</h1>
+            <p class="machine-hero__subtitle">
+                {{ machine.model_name }} · Серийный номер {{ machine.serial_number }} ·
+                Обслуживание: {{ dealer_name }}
+            </p>
+
+            <div class="machine-hero__actions">
+                <a href="{% url 'public_pages:machine_request' machine_tag.public_token %}" class="button button--primary">
+                    Оставить заявку на сервис
+                </a>
+                {% if emergency_phone %}
+                    <a href="tel:{{ emergency_phone.as_e164|default:emergency_phone }}" class="button button--ghost">
+                        Экстренный звонок
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="machine-hero__media">
+            {% if machine.photo %}
+                <img src="{{ machine.photo.url }}" alt="{{ machine.name }}" class="machine-photo" loading="lazy">
+            {% else %}
+                <div class="machine-photo machine-photo--placeholder">
+                    <span>Фото не загружено</span>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="stats-grid">
+        <article class="stat-card">
+            <span class="stat-card__label">Регион</span>
+            <strong class="stat-card__value">{{ machine.region.name }}</strong>
+            <span class="stat-card__meta">{{ machine.branch.name }}</span>
+        </article>
+        <article class="stat-card">
+            <span class="stat-card__label">Гарантия</span>
+            <strong class="stat-card__value">
+                {% if warranty %}{{ warranty.get_status_display }}{% else %}Нет данных{% endif %}
+            </strong>
+            <span class="stat-card__meta">
+                {% if warranty %}
+                    до {{ warranty.warranty_end|date:"d.m.Y" }}
+                {% else %}
+                    Проверьте детали у сервисной команды
+                {% endif %}
+            </span>
+        </article>
+        <article class="stat-card">
+            <span class="stat-card__label">Последнее ТО</span>
+            <strong class="stat-card__value">{{ machine.last_maintenance_date|date:"d.m.Y"|default:"Не указано" }}</strong>
+            <span class="stat-card__meta">История обслуживания, если она опубликована</span>
+        </article>
+        <article class="stat-card">
+            <span class="stat-card__label">Следующее ТО</span>
+            <strong class="stat-card__value">{{ machine.next_maintenance_date|date:"d.m.Y"|default:"Не назначено" }}</strong>
+            <span class="stat-card__meta">План обслуживания</span>
+        </article>
+    </section>
+
+    <section class="section-grid section-grid--machine">
+        <article class="surface-card">
+            <div class="surface-card__eyebrow">Основные данные</div>
+            <h2 class="surface-card__title">Сервисная идентификация</h2>
+            <dl class="detail-list">
+                <div class="detail-list__row">
+                    <dt>Модель</dt>
+                    <dd>{{ machine.model_name }}</dd>
+                </div>
+                <div class="detail-list__row">
+                    <dt>Серийный номер</dt>
+                    <dd>{{ machine.serial_number }}</dd>
+                </div>
+                <div class="detail-list__row">
+                    <dt>Категория</dt>
+                    <dd>{{ machine.get_category_display }}</dd>
+                </div>
+                <div class="detail-list__row">
+                    <dt>Филиал</dt>
+                    <dd>{{ machine.branch.name }}</dd>
+                </div>
+                <div class="detail-list__row">
+                    <dt>Сервисная организация</dt>
+                    <dd>{{ dealer_name }}</dd>
+                </div>
+                {% if machine.description %}
+                    <div class="detail-list__row detail-list__row--stacked">
+                        <dt>Описание</dt>
+                        <dd>{{ machine.description }}</dd>
+                    </div>
+                {% endif %}
+            </dl>
+        </article>
+
+        <article class="surface-card">
+            <div class="surface-card__eyebrow">Контакты</div>
+            <h2 class="surface-card__title">Куда обращаться по сервису</h2>
+            <div class="contact-stack">
+                {% if emergency_phone %}
+                    <a class="contact-stack__item" href="tel:{{ emergency_phone.as_e164|default:emergency_phone }}">
+                        <span class="contact-stack__label">Экстренный телефон</span>
+                        <span class="contact-stack__value">{{ emergency_phone }}</span>
+                    </a>
+                {% endif %}
+                {% if service_phone %}
+                    <a class="contact-stack__item" href="tel:{{ service_phone.as_e164|default:service_phone }}">
+                        <span class="contact-stack__label">Телефон сервиса</span>
+                        <span class="contact-stack__value">{{ service_phone }}</span>
+                    </a>
+                {% endif %}
+                {% if service_email %}
+                    <a class="contact-stack__item" href="mailto:{{ service_email }}">
+                        <span class="contact-stack__label">Email сервиса</span>
+                        <span class="contact-stack__value">{{ service_email }}</span>
+                    </a>
+                {% endif %}
+                {% if service_contact_info %}
+                    <div class="contact-stack__item">
+                        <span class="contact-stack__label">Комментарий сервиса</span>
+                        <span class="contact-stack__meta contact-stack__meta--rich">{{ service_contact_info }}</span>
+                    </div>
+                {% endif %}
+                {% for contact in service_contacts %}
+                    <div class="contact-stack__item">
+                        <span class="contact-stack__label">{{ contact.title }}</span>
+                        <span class="contact-stack__value">{{ contact.name }}</span>
+                        <span class="contact-stack__meta">
+                            {% if contact.phone %}
+                                <a href="tel:{{ contact.phone.as_e164|default:contact.phone }}">{{ contact.phone }}</a>
+                            {% endif %}
+                            {% if contact.phone and contact.email %} · {% endif %}
+                            {% if contact.email %}
+                                <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+                            {% endif %}
+                            {% if contact.note %}<br>{{ contact.note }}{% endif %}
+                        </span>
+                    </div>
+                {% empty %}
+                    <div class="empty-state">Публичные сервисные контакты пока не опубликованы.</div>
+                {% endfor %}
+            </div>
+        </article>
+    </section>
+
+    <section class="section-grid section-grid--machine">
+        <article class="surface-card">
+            <div class="surface-card__eyebrow">Документы</div>
+            <h2 class="surface-card__title">Публичные материалы по машине</h2>
+            <div class="doc-list">
+                {% for document in public_documents %}
+                    <a href="{{ document.file.url }}" target="_blank" class="doc-list__item" rel="noopener">
+                        <span class="doc-list__title">{{ document.title|default:document.original_name }}</span>
+                        <span class="doc-list__meta">{{ document.created_at|date:"d.m.Y" }}</span>
+                    </a>
+                {% empty %}
+                    <div class="empty-state">Открытые документы пока не опубликованы.</div>
+                {% endfor %}
+            </div>
+        </article>
+
+        <article class="surface-card">
+            <div class="surface-card__eyebrow">Сервисная история</div>
+            <h2 class="surface-card__title">Последние публичные записи</h2>
+            <div class="timeline-list">
+                {% for record in public_history %}
+                    <div class="timeline-list__item">
+                        <div class="timeline-list__date">{{ record.service_date|date:"d.m.Y" }}</div>
+                        <div class="timeline-list__content">
+                            <div class="timeline-list__title">{{ record.get_work_type_display }}</div>
+                            <div class="timeline-list__text">
+                                {{ record.public_summary|default:"Публичное резюме не добавлено." }}
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="empty-state">Публичная история работ пока не опубликована.</div>
+                {% endfor %}
+            </div>
+        </article>
+    </section>
+
+    <section class="sticky-cta">
+        <div class="sticky-cta__text">
+            Нужна помощь по этой машине?
+        </div>
+        <a href="{% url 'public_pages:machine_request' machine_tag.public_token %}" class="button button--primary button--compact">
+            Оставить заявку
+        </a>
+    </section>
+{% endblock %}

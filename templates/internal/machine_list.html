@@ -1,0 +1,137 @@
+{% extends "internal/base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+    <section class="ops-cards">
+        {% for card in machine_cards %}
+            <article class="ops-card ops-card--{{ card.tone }}">
+                <span class="ops-card__label">{{ card.label }}</span>
+                <strong class="ops-card__value">{{ card.value }}</strong>
+            </article>
+        {% endfor %}
+    </section>
+
+    <section class="ops-panel">
+        <div class="ops-panel__header">
+            <div>
+                <div class="ops-panel__eyebrow">Фильтры</div>
+                <h2 class="ops-panel__title">Найти нужную машину</h2>
+            </div>
+        </div>
+        <form method="get" class="ops-filterbar ops-filterbar--wide">
+            <div class="ops-filterbar__group ops-filterbar__group--search">
+                <label for="q">Поиск</label>
+                <input type="text" name="q" id="q" value="{{ selected_filters.q }}" placeholder="Название, модель, серийный номер">
+            </div>
+            <div class="ops-filterbar__group">
+                <label for="status">Статус</label>
+                <select name="status" id="status">
+                    <option value="">Все статусы</option>
+                    {% for value, label in machine_statuses %}
+                        <option value="{{ value }}"{% if selected_filters.status == value %} selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="ops-filterbar__group">
+                <label for="region">Регион</label>
+                <select name="region" id="region">
+                    <option value="">Все регионы</option>
+                    {% for item in filter_regions %}
+                        <option value="{{ item.pk }}"{% if selected_filters.region == item.pk|stringformat:"s" %} selected{% endif %}>{{ item.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="ops-filterbar__group">
+                <label for="branch">Филиал</label>
+                <select name="branch" id="branch">
+                    <option value="">Все филиалы</option>
+                    {% for item in filter_branches %}
+                        <option value="{{ item.pk }}"{% if selected_filters.branch == item.pk|stringformat:"s" %} selected{% endif %}>{{ item.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="ops-filterbar__group">
+                <label for="dealer">Дилер</label>
+                <select name="dealer" id="dealer">
+                    <option value="">Все дилеры</option>
+                    {% for item in filter_dealers %}
+                        <option value="{{ item.pk }}"{% if selected_filters.dealer == item.pk|stringformat:"s" %} selected{% endif %}>{{ item.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="ops-filterbar__group">
+                <label for="public_state">Публичность</label>
+                <select name="public_state" id="public_state">
+                    <option value="">Все</option>
+                    <option value="public"{% if selected_filters.public_state == "public" %} selected{% endif %}>Публичные</option>
+                    <option value="private"{% if selected_filters.public_state == "private" %} selected{% endif %}>Внутренние</option>
+                </select>
+            </div>
+            <div class="ops-filterbar__actions">
+                <button type="submit" class="ops-button">Применить</button>
+                <a href="{% url 'core:machine_list' %}" class="ops-button ops-button--ghost">Сбросить</a>
+            </div>
+        </form>
+    </section>
+
+    <section class="ops-panel">
+        <div class="ops-panel__header">
+            <div>
+                <div class="ops-panel__eyebrow">Список</div>
+                <h2 class="ops-panel__title">Машины</h2>
+            </div>
+        </div>
+
+        <div class="ops-table-wrap">
+            <table class="ops-table">
+                <thead>
+                    <tr>
+                        <th>Машина</th>
+                        <th>Регион / филиал</th>
+                        <th>Дилер</th>
+                        <th>Статус</th>
+                        <th>Следующее ТО</th>
+                        <th>Публичный доступ</th>
+                        <th>Открытые заявки</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for machine in machines %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'core:machine_detail' machine.pk %}" class="ops-table__link">
+                                    <strong>{{ machine.name }}</strong>
+                                    <span>{{ machine.model_name }} · {{ machine.serial_number }}</span>
+                                </a>
+                            </td>
+                            <td>{{ machine.region.name }}<br><span class="ops-table__muted">{{ machine.branch.name }}</span></td>
+                            <td>{{ machine.dealer.name|default:machine.organization.name }}</td>
+                            <td><span class="badge badge--machine-{{ machine.status }}">{{ machine.get_status_display }}</span></td>
+                            <td>{{ machine.next_maintenance_date|date:"d.m.Y"|default:"Не назначено" }}</td>
+                            <td>
+                                {% if machine.is_public %}
+                                    <span class="badge badge--public">Публичная</span>
+                                    {% if machine.active_tag_count == 0 %}
+                                        <span class="badge badge--warning-soft">Без активного тега</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="badge badge--private">Внутренняя</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ machine.open_requests_count }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7">
+                                <div class="ops-empty">По текущим фильтрам машины не найдены.</div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% include "internal/includes/pagination.html" %}
+    </section>
+{% endblock %}

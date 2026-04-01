@@ -1,0 +1,29 @@
+{% extends "public_pages/base.html" %}
+
+{% block title %}Заявка отправлена | {{ product_name }}{% endblock %}
+
+{% block content %}
+    <section class="success-panel">
+        <div class="eyebrow">Заявка отправлена</div>
+        <h1 class="success-panel__title">Сервисная служба приняла обращение</h1>
+        <p class="success-panel__text">
+            {% if machine %}
+                Запрос зарегистрирован по машине {{ machine.name }}. С вами свяжутся по указанному телефону после первичной обработки обращения.
+            {% else %}
+                Запрос зарегистрирован. С вами свяжутся по указанному телефону после первичной обработки обращения.
+            {% endif %}
+        </p>
+        <div class="alert alert--success">
+            Для ускорения обработки держите под рукой серийный номер машины и место ее нахождения.
+        </div>
+
+        <div class="hero-actions">
+            {% if machine_tag %}
+                <a href="{% url 'public_pages:machine_detail' machine_tag.public_token %}" class="button button--primary">
+                    Вернуться к паспорту машины
+                </a>
+            {% endif %}
+            <a href="{% url 'public_pages:contact' %}" class="button button--ghost">Связаться со службой сервиса</a>
+        </div>
+    </section>
+{% endblock %}

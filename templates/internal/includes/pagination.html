@@ -1,0 +1,23 @@
+{% if is_paginated %}
+    <nav class="ops-pagination">
+        {% if page_obj.has_previous %}
+            <a href="?{% if querystring_without_page %}{{ querystring_without_page }}&{% endif %}page={{ page_obj.previous_page_number }}" class="ops-button ops-button--ghost">
+                Назад
+            </a>
+        {% else %}
+            <span class="ops-button ops-button--ghost is-disabled">Назад</span>
+        {% endif %}
+
+        <span class="ops-pagination__meta">
+            Страница {{ page_obj.number }} из {{ paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?{% if querystring_without_page %}{{ querystring_without_page }}&{% endif %}page={{ page_obj.next_page_number }}" class="ops-button ops-button--ghost">
+                Вперед
+            </a>
+        {% else %}
+            <span class="ops-button ops-button--ghost is-disabled">Вперед</span>
+        {% endif %}
+    </nav>
+{% endif %}

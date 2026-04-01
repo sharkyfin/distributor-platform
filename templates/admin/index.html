@@ -1,0 +1,126 @@
+{% extends "admin/base.html" %}
+
+{% load i18n %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title }}{% endblock %}
+
+{% block branding %}
+    {% include "unfold/helpers/site_branding.html" %}
+{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col gap-6">
+        <section class="passport-dashboard-shell rounded-[24px] border border-base-200 bg-white px-6 py-6 shadow-sm dark:border-base-800 dark:bg-base-900">
+            <div class="flex flex-col gap-4">
+                <div class="max-w-3xl">
+                    <div class="text-[11px] font-semibold uppercase tracking-[0.22em] text-base-500">
+                        Главная панель
+                    </div>
+                    <h1 class="mt-2 text-3xl font-semibold tracking-tight text-font-important-light dark:text-font-important-dark">
+                        Сервис и парк техники
+                    </h1>
+                    <p class="mt-3 max-w-2xl text-sm leading-6 text-font-default-light dark:text-font-default-dark">
+                        Сводка по обращениям, гарантиям и плановому обслуживанию.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {% for card in dashboard_cards %}
+                <a href="{{ card.link }}" class="passport-metric-card passport-metric-card--{{ card.tone }}">
+                    <div class="passport-metric-card__label">{{ card.label }}</div>
+                    <div class="passport-metric-card__value">{{ card.value }}</div>
+                    <div class="passport-metric-card__caption">{{ card.caption }}</div>
+                </a>
+            {% endfor %}
+        </section>
+
+        <section class="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.85fr)]">
+            <div class="grid gap-6">
+                {% for panel in dashboard_panels %}
+                    <article class="passport-panel">
+                        <div class="passport-panel__header">
+                            <div>
+                                <h2 class="passport-panel__title">{{ panel.title }}</h2>
+                                <p class="passport-panel__subtitle">{{ panel.subtitle }}</p>
+                            </div>
+                        </div>
+                        <div class="passport-panel__body">
+                            {% if panel.items %}
+                                <div class="passport-panel__list">
+                                    {% for item in panel.items %}
+                                        <a href="{{ item.link }}" class="passport-panel__item">
+                                            <div class="passport-panel__item-title">{{ item.title }}</div>
+                                            <div class="passport-panel__item-meta">{{ item.meta }}</div>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="passport-panel__empty">Для этого раздела пока нет данных.</div>
+                            {% endif %}
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+
+            <div class="grid gap-6">
+                <article class="passport-panel">
+                    <div class="passport-panel__header">
+                        <div>
+                            <h2 class="passport-panel__title">Действия</h2>
+                            <p class="passport-panel__subtitle">Создание и обновление данных</p>
+                        </div>
+                    </div>
+                    <div class="passport-panel__body">
+                        <div class="passport-panel__list">
+                            {% for item in dashboard_quick_links %}
+                                <a href="{{ item.link }}" class="passport-panel__item">
+                                    <div class="passport-panel__item-title">{{ item.title }}</div>
+                                    <div class="passport-panel__item-meta">{{ item.description }}</div>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </article>
+
+                <article class="passport-panel">
+                    <div class="passport-panel__header">
+                        <div>
+                            <h2 class="passport-panel__title">Публичные страницы техники</h2>
+                            <p class="passport-panel__subtitle">Опубликованные карточки машин</p>
+                        </div>
+                    </div>
+                    <div class="passport-panel__body">
+                        {% if public_pages_preview %}
+                            <div class="passport-panel__list">
+                                {% for item in public_pages_preview %}
+                                    <a href="{{ item.link }}" target="_blank" class="passport-panel__item" rel="noopener">
+                                        <div class="passport-panel__item-title">{{ item.title }}</div>
+                                        <div class="passport-panel__item-meta">{{ item.meta }}</div>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="passport-panel__empty">Публичные страницы пока не опубликованы.</div>
+                        {% endif %}
+                    </div>
+                </article>
+
+                {% include "unfold/helpers/history.html" %}
+            </div>
+        </section>
+
+        <section class="passport-panel">
+            <div class="passport-panel__header">
+                <div>
+                    <h2 class="passport-panel__title">Каталог модулей</h2>
+                    <p class="passport-panel__subtitle">Основные разделы платформы</p>
+                </div>
+            </div>
+            <div class="passport-panel__body">
+                {% include "unfold/helpers/app_list_default.html" %}
+            </div>
+        </section>
+    </div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "public_pages/base.html" %}
+
+{% block title %}О сервисе | {{ product_name }}{% endblock %}
+
+{% block content %}
+    <section class="page-header">
+        <div class="eyebrow">О продукте</div>
+        <h1 class="page-header__title">Инструмент для обслуживания техники в распределенной дилерской сети</h1>
+        <p class="page-header__lead">
+            Сервис объединяет публичную карточку машины и внутреннюю систему работы с заявками,
+            гарантиями и историей обслуживания.
+        </p>
+    </section>
+
+    <section class="section-grid">
+        <article class="surface-card">
+            <div class="surface-card__eyebrow">Публичная часть</div>
+            <h2 class="surface-card__title">Мобильный паспорт техники</h2>
+            <div class="feature-list">
+                <div class="feature-list__item">Доступ по QR и NFC без раскрытия внутренних идентификаторов.</div>
+                <div class="feature-list__item">Безопасный набор данных: контакты, гарантия, даты ТО, документы с публичным доступом.</div>
+                <div class="feature-list__item">Простая форма обращения с фото и согласием на обработку данных.</div>
+            </div>
+        </article>
+
+        <article class="surface-card">
+            <div class="surface-card__eyebrow">Внутренняя система</div>
+            <h2 class="surface-card__title">Работа сервисной службы</h2>
+            <div class="feature-list">
+                <div class="feature-list__item">Роли для дистрибьютора, дилеров, менеджеров, инженеров и операторов.</div>
+                <div class="feature-list__item">История работ, гарантия, вложения и аудит административных изменений.</div>
+                <div class="feature-list__item">Фильтрация по организациям, регионам, филиалам и обслуживающим дилерам.</div>
+            </div>
+        </article>
+    </section>
+
+    <section class="surface-card">
+        <div class="surface-card__eyebrow">Архитектура</div>
+        <h2 class="surface-card__title">Монолитная архитектура без лишних компонентов</h2>
+        <div class="feature-list">
+            <div class="feature-list__item">Django-монолит с серверным рендерингом для быстрого запуска и сопровождения.</div>
+            <div class="feature-list__item">PostgreSQL, Redis, Celery и S3-compatible storage для гибкого развертывания.</div>
+            <div class="feature-list__item">Подходит для размещения на локальной или российской инфраструктуре без обязательных внешних SaaS.</div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% load i18n %}
+
+<div id="site-name" class="flex items-center min-w-0">
+    {% if site_logo %}
+        {% include "unfold/helpers/site_logo.html" %}
+    {% elif site_dropdown %}
+        {{ site_header|default:_("Django administration") }}
+    {% else %}
+        <a href="{% url 'admin:index' %}">
+            {{ site_header|default:_("Django administration") }}
+        </a>
+    {% endif %}
+</div>

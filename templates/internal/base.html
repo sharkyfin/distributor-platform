@@ -1,0 +1,54 @@
+{% load static %}
+
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ page_title }} | Сервис{% endblock %}</title>
+    <meta name="theme-color" content="#11171c">
+    <link rel="icon" href="{% static 'brand/icon.svg' %}" type="image/svg+xml">
+    <link rel="stylesheet" href="{% static 'internal/operations.css' %}">
+</head>
+<body class="ops-body">
+    <div class="ops-layout">
+        <aside class="ops-sidebar">
+            <a href="{% url 'core:dashboard' %}" class="ops-brand">
+                <img src="{% static 'brand/icon.svg' %}" alt="" class="ops-brand__mark">
+                <span class="ops-brand__text">
+                    <span class="ops-brand__eyebrow">Управление сервисом</span>
+                    <span class="ops-brand__title">Сервисный паспорт</span>
+                </span>
+            </a>
+
+            <nav class="ops-nav">
+                {% for item in internal_navigation %}
+                    <a href="{{ item.href }}" class="ops-nav__item{% if item.key == current_nav %} is-active{% endif %}">
+                        <span class="ops-nav__label">{{ item.label }}</span>
+                        <span class="ops-nav__meta">{{ item.meta }}</span>
+                    </a>
+                {% endfor %}
+            </nav>
+
+            <section class="ops-side-actions">
+                <a href="{% url 'admin:index' %}" class="ops-button ops-button--sidebar">Админ-панель</a>
+                <a href="{% url 'public_pages:landing' %}" class="ops-button ops-button--sidebar ops-button--ghost">Публичные страницы</a>
+            </section>
+        </aside>
+
+        <main class="ops-main">
+            <header class="ops-header">
+                <div>
+                    <div class="ops-eyebrow">Сервис</div>
+                    <h1 class="ops-title">{{ page_title }}</h1>
+                    {% if page_subtitle %}
+                        <p class="ops-subtitle">{{ page_subtitle }}</p>
+                    {% endif %}
+                </div>
+            </header>
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>
